@@ -5,7 +5,7 @@
 Piotr Wójcik*, Maksym Petrenko*, Wojciech Gromski*, Przemysław Spurek, Maciej Zięba <br>
 (* denotes equal contribution)
 
-![arXiv](https://img.shields.io/badge/arXiv-Coming_Soon-b31b1b.svg)
+[![arXiv](https://img.shields.io/badge/arXiv-2602.03410-b31b1b.svg)](https://arxiv.org/abs/2602.03410)
 [![GitHub stars](https://img.shields.io/github/stars/gmum/UnHype?style=social)](https://github.com/gmum/UnHype)
 
 </div>
