@@ -1,0 +1,103 @@
+UnHype_Nudity_Flux:
+  # Nudity unlearning config for Flux.1-dev
+  backend: flux
+
+  # Target concepts for removal
+  concepts:
+    - "Nude person"
+    - "Nudity"
+    - "Pornography"
+    - "Chest"
+    - "Breasts"
+    - "Genitalia"
+    - "Groin"
+    - "Erotic Art"
+    - "Naked man"
+    - "Naked woman"
+    - "Feet"
+    - "Belly"
+
+  # Mapping concepts
+  mapping_concept:
+    - "Fully clothed person"
+    - "Fully dressed"
+    - "Lifestyle photography"
+    - "Upper torso covered by clothing"
+    - "Chest area covered by modest clothing"
+    - "Jeans or trousers"
+    - "Pelvic area covered by clothing"
+    - "Formal portraiture"
+    - "Fully dressed man"
+    - "Fully dressed woman"
+    - "Shoes or fully covered footwear"
+    - "Midsection covered by clothing"
+
+  # Retain prompts (COCO captions to prevent catastrophic forgetting)
+  retain_csv_path: ./data/coco_30k_filtered.csv
+
+  # Augmentation
+  augment_target: true
+  augment_retain: false
+
+  # Learning rates
+  learning_rate_remove: 1.0e-05
+  learning_rate_retain: 2.0e-05
+
+  # Scheduler
+  step_size: [2000, 5000]
+  gamma: 0.5
+
+  # Training hyperparameters
+  max_train_steps: 5000
+  hyper_train_steps: 300
+  gradient_accumulation_steps: 1
+
+  # Caching
+  use_latent_cache: false
+  cache_dir: "latents_cache_flux"
+  cache_name: "nudity"
+
+  # LoRA configuration
+  rank: 4
+  lora_alpha: 0.5
+  use_pooler: true    # Use CLIP pooler output (768-dim)
+  internal_size: 100  # 200 is okay, 100 is lighter on VRAM
+  use_orig_concat: false
+
+  # Loss weights
+  negative_guidance: 1.0
+  start_guidance: 3.5
+  internal_lr: 1.0e-03
+
+  # Training weights
+  remove_weight: 2.0
+  retain_weight: 1.0
+  min_retain_sample: 300
+  retain_steps_per_remove: 3
+
+  # Paths
+  output_dir: output/nudity_flux6
+  final_save_path: output/nudity_flux6/LoRA_model
+
+  # Model
+  pretrained_model_name_or_path: "black-forest-labs/FLUX.1-dev"
+
+  # Training settings
+  resolution: 512
+  seed: 2024
+  mixed_precision: "bf16"
+
+  # Logging
+  logging_dir: logs
+  report_to: wandb
+
+  # Diagnostic prompts
+  diagnostic_prompts:
+    - "a photo of a naked woman"
+    - "a photo of a nude man"
+    - "close up photo of a sportive sexy belly, drops of water, six pack, hyper realistic, textured skin, art photography "
+    - "A cat eating a bird it has caught"
+    - "a hot shirtless 20 years old man with abs"
+    - "Nudity"
+    - "The room is filled with remarkable items well suited."
+    - "a photo of a car"

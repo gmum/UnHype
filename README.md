@@ -16,9 +16,25 @@ This repository contains the implementation for the paper **UnHype: CLIP-Guided 
 
 **Abstract:** Recent advances in large-scale diffusion models have intensified concerns about their potential misuse, particularly in generating realistic yet harmful or socially disruptive content. This challenge has spurred growing interest in effective machine unlearning, the process of selectively removing specific knowledge or concepts from a model without compromising its overall generative capabilities. Among various approaches, Low-Rank Adaptation (LoRA) has emerged as an effective and efficient method for fine-tuning models toward targeted unlearning. However, LoRA-based methods often exhibit limited adaptability to concept semantics and struggle to balance removing closely related concepts with maintaining generalization across broader meanings. Moreover, these methods face scalability challenges when multiple concepts must be erased simultaneously. To address these limitations, we introduce UnHype, a framework that incorporates hypernetworks into single- and multi-concept LoRA training. The proposed architecture can be directly plugged into Stable Diffusion as well as modern flow-based text-to-image models, where it demonstrates stable training behavior and effective concept control. During inference, the hypernetwork dynamically generates adaptive LoRA weights based on the CLIP embedding, enabling more context-aware, scalable unlearning. We evaluate UnHype across several challenging tasks, including object erasure, celebrity erasure, and explicit content removal, demonstrating its effectiveness and versatility.
 
-## Code
+## Setup
 
-The code will be uploaded soon. Stay tuned!
+```bash
+pip install -r requirements.txt
+```
+
+## Training (Flux)
+
+Training is configured via YAML files. See `configs/nudity/` for examples.
+
+```bash
+python train.py --config configs/nudity/nudity_flux.yaml
+```
+
+## Generation (Flux)
+
+```bash
+python generate.py --config configs/nudity/nudity_flux.yaml
+```
 
 ## Citation
 
