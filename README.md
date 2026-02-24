@@ -24,6 +24,8 @@ pip install -r requirements.txt
 
 ## Training (Flux)
 
+Note: the current state supports runs on FLUX; SD codebase soon!
+
 Training is configured via YAML files. See `configs/nudity/` for examples.
 
 ```bash
@@ -39,3 +41,14 @@ python generate.py --config configs/nudity/nudity_flux.yaml
 ## Citation
 
 If you find this work useful, please consider citing our paper.
+
+```
+@misc{wojcik2026unhype,
+  author    = {Piotr W{\'o}jcik and Maksym Petrenko and Wojciech Gromski and Przemys{\l}aw Spurek and Maciej Zi{\k{e}}ba},
+  title     = {UnHype: {CLIP}-Guided Hypernetworks for Dynamic {LoRA} Unlearning},
+  year      = {2026},
+  eprint    = {2602.03410},
+  primaryClass = {cs.CV},
+  url       = {https://arxiv.org/abs/2602.03410}
+}
+```
