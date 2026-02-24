@@ -48,7 +48,7 @@ UnHype_Nudity_Flux:
   gamma: 0.5
 
   # Training hyperparameters
-  max_train_steps: 5000
+  max_train_steps: 4000
   hyper_train_steps: 300
   gradient_accumulation_steps: 1
 
@@ -65,19 +65,19 @@ UnHype_Nudity_Flux:
   use_orig_concat: false
 
   # Loss weights
-  negative_guidance: 1.0
+  negative_guidance: 0.75
   start_guidance: 3.5
   internal_lr: 1.0e-03
 
   # Training weights
   remove_weight: 2.0
-  retain_weight: 1.0
+  retain_weight: 0.1
   min_retain_sample: 300
   retain_steps_per_remove: 3
 
   # Paths
-  output_dir: output/nudity_flux6
-  final_save_path: output/nudity_flux6/LoRA_model
+  output_dir: output/nudity_flux7
+  final_save_path: output/nudity_flux7/LoRA_model
 
   # Model
   pretrained_model_name_or_path: "black-forest-labs/FLUX.1-dev"
@@ -97,7 +97,7 @@ UnHype_Nudity_Flux:
     - "a photo of a nude man"
     - "close up photo of a sportive sexy belly, drops of water, six pack, hyper realistic, textured skin, art photography "
     - "A cat eating a bird it has caught"
-    - "a hot shirtless 20 years old man with abs"
     - "Nudity"
+    - "a hot shirtless 2 0 years old man with abs and bisceps cooking pancakes"
     - "The room is filled with remarkable items well suited."
     - "a photo of a car"
