@@ -21,7 +21,9 @@ def main():
     print(f"Detected backend: {backend}")
 
     if backend == 'sd':
-        raise NotImplementedError("Stable Diffusion backend is not yet implemented")
+        sys.argv = [sys.argv[0]] + ['--config', args.config] + remaining
+        from backends.sd_generate import main as sd_main
+        sd_main()
     elif backend == 'flux':
         sys.argv = [sys.argv[0]] + ['--config', args.config] + remaining
         from backends.flux_generate import main as flux_main

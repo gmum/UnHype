@@ -18,7 +18,8 @@ def main():
     sys.argv = [sys.argv[0]] + ['--config', args.config] + remaining
 
     if backend == 'sd':
-        raise NotImplementedError("Stable Diffusion backend is not yet implemented")
+        from backends.sd_train import main as sd_main
+        sd_main()
     elif backend == 'flux':
         from backends.flux_train import main as flux_main
         flux_main()

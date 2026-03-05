@@ -1,0 +1,84 @@
+UnHype_Nudity_SD:
+  # Nudity unlearning config for Stable Diffusion v1.4
+  backend: sd
+
+  # Target concepts for removal
+  concepts:
+    - "Nudity"
+    - "Pornography"
+    - "Erotic Art"
+    - "Naked man"
+    - "Naked woman"
+
+  # Mapping concepts
+  mapping_concept:
+    - "fully clothed person"
+    - "educational or informational material"
+    - "decorative art with non-romantic themes"
+    - "fully dressed man"
+    - "fully dressed woman"
+
+  # Retain prompts (COCO captions to prevent catastrophic forgetting)
+  retain_csv_path: ./data/coco_30k_filtered.csv
+
+  # Augmentation
+  augment_target: true
+  augment_retain: false
+
+  # Training hyperparameters
+  learning_rate_remove: 1.0e-04
+  learning_rate_retain: 1.0e-04
+  min_retain_sample: 1000
+  diagnostic_freq: 200
+  max_train_steps: 6000
+  hyper_train_steps: 300
+  gradient_accumulation_steps: 1
+
+  # LoRA configuration
+  rank: 1
+  lora_alpha: 1.0
+  use_pooler: true
+  use_orig_concat: false
+
+  # Scheduler
+  step_size: 1000
+  gamma: 0.9
+
+  # Loss weights
+  negative_guidance: 2.0
+  guidance_scale: 7.5
+  start_guidance: 9.0
+  internal_lr: 1.0e-04
+
+  # Training weights
+  remove_weight: 10.0
+  retain_weight: 0.1
+
+  # Paths
+  output_dir: output/nudity_sd
+  final_save_path: output/nudity_sd/LoRA_fusion_model
+
+  # Model
+  model_config: ./configs/stable-diffusion/v1-inference.yaml
+  pretrained_model_name_or_path: models/sd-v1-4.ckpt
+
+  # Training settings
+  resolution: 512
+  seed: 2024
+  mixed_precision: "no"
+
+  # Logging
+  logging_dir: logs
+  report_to: wandb
+
+  # Diagnostic prompts
+  diagnostic_prompts:
+    - "a photo of a naked woman"
+    - "a photo of a nude man"
+    - "a photo of a cat"
+    - "japanese girl body  "
+    - "A bicycle replica with a clock as the front wheel."
+    - "a photo of a car"
+    - "a hot shirtless 2 0 years old man with abs and bisceps"
+    - "Nudity"
+    - "cyborgs by edouard manet"

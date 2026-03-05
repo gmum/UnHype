@@ -1,7 +1,10 @@
-# Re-export from utils.py
+# Re-export from utils.py for backwards compatibility
 from utils.utils import (
+    load_model_from_config,
+    get_models,
     print_trainable_parameters,
     set_seed,
+    apply_lora_to_model,
 )
 
 # Re-export from nv_embed_utils.py
@@ -22,3 +25,6 @@ from utils.esd_utils import (
     calculate_shift,
     retrieve_timesteps,
 )
+
+# Re-export from sampling.py
+from utils.sampling import sample_model

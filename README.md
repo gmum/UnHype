@@ -22,20 +22,44 @@ This repository contains the implementation for the paper **UnHype: CLIP-Guided 
 pip install -r requirements.txt
 ```
 
-## Training (Flux)
+## Training
 
-Note: the current state supports runs on FLUX; SD codebase soon!
+Training is configured via YAML files. See `configs/nudity/` for examples. The backend (SD or Flux) is auto-detected from the config.
 
-Training is configured via YAML files. See `configs/nudity/` for examples.
+More configs for CIFAR10 and celebrity removal are coming soon.
+
+### Stable Diffusion
+
+```bash
+python train.py --config configs/nudity/nudity_sd.yaml
+```
+
+### Flux
 
 ```bash
 python train.py --config configs/nudity/nudity_flux.yaml
 ```
 
-## Generation (Flux)
+## Generation
+
+### Stable Diffusion
 
 ```bash
-python generate.py --config configs/nudity/nudity_flux.yaml
+python generate.py --task nudity \
+    --config configs/nudity/nudity_sd.yaml \
+    --lora-path output/nudity_sd/LoRA_fusion_model/hyper_lora_final.pth \
+    --prompts-csv data/I2P_prompts_4703.csv \
+    --output-dir output/nudity_sd/images
+```
+
+### Flux
+
+```bash
+python generate.py \
+    --config configs/nudity/nudity_flux.yaml \
+    --csv_path data/I2P_prompts_4703.csv \
+    --lora_path output/nudity_flux/LoRA_model/hyper_lora.pth \
+    --output_dir output/flux_images
 ```
 
 ## Citation
