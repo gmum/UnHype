@@ -28,13 +28,13 @@ Training is configured via YAML files. See `configs/nudity/` for examples. The b
 
 More configs for CIFAR10 and celebrity removal are coming soon.
 
-### Stable Diffusion
+### Stable Diffusion 1.4
 
 ```bash
 python train.py --config configs/nudity/nudity_sd.yaml
 ```
 
-### Flux
+### Flux 1 \[dev\]
 
 ```bash
 python train.py --config configs/nudity/nudity_flux.yaml
