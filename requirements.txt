@@ -87,7 +87,7 @@ omegaconf==2.3.0
 onnxruntime==1.22.1
 open_clip_torch==3.2.0
 openai==2.15.0
-opencv-python-headless==4.12.0.88
+opencv-python-headless>=4.8,<4.10
 packaging==25.0
 pandas==2.3.1
 parso==0.8.4
