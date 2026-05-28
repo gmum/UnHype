@@ -1,0 +1,287 @@
+UnHype_Celebrity_CLIP:
+  # Celebrity unlearning config using CLIP embeddings (768-dim)
+  backend: sd
+
+  # Target celebrities for removal (100 from MACE benchmark)
+  concepts:
+    - "adam driver"
+    - "adriana lima"
+    - "amber heard"
+    - "amy adams"
+    - "andrew garfield"
+    - "angelina jolie"
+    - "anjelica huston"
+    - "anna faris"
+    - "anna kendrick"
+    - "anne hathaway"
+    - "arnold schwarzenegger"
+    - "barack obama"
+    - "beth behrs"
+    - "bill clinton"
+    - "bob dylan"
+    - "bob marley"
+    - "bradley cooper"
+    - "bruce willis"
+    - "bryan cranston"
+    - "cameron diaz"
+    - "channing tatum"
+    - "charlie sheen"
+    - "charlize theron"
+    - "chris evans"
+    - "chris hemsworth"
+    - "chris pine"
+    - "chuck norris"
+    - "courteney cox"
+    - "demi lovato"
+    - "drake"
+    - "drew barrymore"
+    - "dwayne johnson"
+    - "ed sheeran"
+    - "elon musk"
+    - "elvis presley"
+    - "emma stone"
+    - "frida kahlo"
+    - "george clooney"
+    - "glenn close"
+    - "gwyneth paltrow"
+    - "harrison ford"
+    - "hillary clinton"
+    - "hugh jackman"
+    - "idris elba"
+    - "jake gyllenhaal"
+    - "james franco"
+    - "jared leto"
+    - "jason momoa"
+    - "jennifer aniston"
+    - "jennifer lawrence"
+    - "jennifer lopez"
+    - "jeremy renner"
+    - "jessica biel"
+    - "jessica chastain"
+    - "john oliver"
+    - "john wayne"
+    - "johnny depp"
+    - "julianne hough"
+    - "justin timberlake"
+    - "kate bosworth"
+    - "kate winslet"
+    - "leonardo dicaprio"
+    - "margot robbie"
+    - "mariah carey"
+    - "meryl streep"
+    - "mick jagger"
+    - "mila kunis"
+    - "milla jovovich"
+    - "morgan freeman"
+    - "nick jonas"
+    - "nicolas cage"
+    - "nicole kidman"
+    - "octavia spencer"
+    - "olivia wilde"
+    - "oprah winfrey"
+    - "paul mccartney"
+    - "paul walker"
+    - "peter dinklage"
+    - "philip seymour hoffman"
+    - "reese witherspoon"
+    - "richard gere"
+    - "ricky gervais"
+    - "rihanna"
+    - "robin williams"
+    - "ronald reagan"
+    - "ryan gosling"
+    - "ryan reynolds"
+    - "shia labeouf"
+    - "shirley temple"
+    - "spike lee"
+    - "stan lee"
+    - "theresa may"
+    - "tom cruise"
+    - "tom hanks"
+    - "tom hardy"
+    - "tom hiddleston"
+    - "whoopi goldberg"
+    - "zac efron"
+    - "zayn malik"
+    - "melania trump"
+
+  # Mapping concepts - gender-appropriate replacements
+  mapping_concept:
+    - "a man"
+    - "a woman"
+    - "a woman"
+    - "a woman"
+    - "a man"
+    - "a woman"
+    - "a woman"
+    - "a woman"
+    - "a woman"
+    - "a woman"
+    - "a man"
+    - "a man"
+    - "a woman"
+    - "a man"
+    - "a man"
+    - "a man"
+    - "a man"
+    - "a man"
+    - "a man"
+    - "a woman"
+    - "a man"
+    - "a man"
+    - "a woman"
+    - "a man"
+    - "a man"
+    - "a man"
+    - "a man"
+    - "a woman"
+    - "a woman"
+    - "a man"
+    - "a woman"
+    - "a man"
+    - "a man"
+    - "a man"
+    - "a man"
+    - "a woman"
+    - "a woman"
+    - "a man"
+    - "a woman"
+    - "a woman"
+    - "a man"
+    - "a woman"
+    - "a man"
+    - "a man"
+    - "a man"
+    - "a man"
+    - "a man"
+    - "a man"
+    - "a woman"
+    - "a woman"
+    - "a woman"
+    - "a man"
+    - "a woman"
+    - "a woman"
+    - "a man"
+    - "a man"
+    - "a man"
+    - "a woman"
+    - "a man"
+    - "a woman"
+    - "a woman"
+    - "a man"
+    - "a woman"
+    - "a woman"
+    - "a woman"
+    - "a man"
+    - "a woman"
+    - "a woman"
+    - "a man"
+    - "a man"
+    - "a man"
+    - "a woman"
+    - "a woman"
+    - "a woman"
+    - "a woman"
+    - "a man"
+    - "a man"
+    - "a man"
+    - "a man"
+    - "a woman"
+    - "a man"
+    - "a man"
+    - "a woman"
+    - "a man"
+    - "a man"
+    - "a man"
+    - "a man"
+    - "a man"
+    - "a woman"
+    - "a man"
+    - "a man"
+    - "a woman"
+    - "a man"
+    - "a man"
+    - "a man"
+    - "a man"
+    - "a woman"
+    - "a man"
+    - "a man"
+    - "a woman"
+
+  # Retain prompts (other celebrities to preserve generation ability)
+  retain_csv_path: ./data/celebrity_retain_improved.csv
+
+  # Augmentation
+  augment_target: true
+  augment_retain: false
+  celebrity_mode: true
+
+  # Training hyper parameters
+  learning_rate_remove: 1.0e-04
+  learning_rate_retain: 3.0e-04
+  max_train_steps : 4000
+  hyper_train_steps: 300
+  gradient_accumulation_steps: 1
+
+  # Embedding model
+  use_huge: false  # Use CLIP-ViT-H (1024-dim) instead of CLIP-ViT-L (768-dim)
+
+  # LoRA configuration
+  rank: 6
+  lora_alpha: 1.0
+  internal_size: 512
+
+  # Loss weights
+  negative_guidance: 1.0
+  guidance_scale: 7.5
+  start_guidance: 9.0
+  internal_lr: 1.0e-04
+
+  # Training weights
+  remove_weight: 10.0
+  retain_weight: 5.0
+  retain_steps_per_remove: 1
+  retain_batch_size: 1000
+
+  step_size: 3000
+
+  # Paths
+  output_dir:  /net/tscratch/people/plgpiotrwojcik/output/celebrity_clip_h_final_eq_5
+  final_save_path: /net/tscratch/people/plgpiotrwojcik/output/celebrity_clip_h_final_eq_5/LoRA_fusion_model
+
+  # Model
+  model_config: ./configs/stable-diffusion/v1-inference.yaml
+  pretrained_model_name_or_path: models/sd-v1-4.ckpt
+
+  # Training settings
+  resolution: 512
+  seed: 2024
+  mixed_precision: "no"
+
+  # Logging
+  logging_dir: logs
+  report_to: wandb
+
+  # Diagnostic prompts
+  diagnostic_prompts:
+    - "a photo of adam driver"
+    - "a portrait of adriana   lima"
+    - "amber heard at an event"
+    - "amy adams smiling"
+    - "a portrait of amy adams"
+    - "a portrait of bob dylan"
+    - "andrew garfield acting"
+    - "a photo of bruce willis"
+    - "a portrait of bob marley"
+    - "a photo of a woman"
+    - "a portrait of a woman"
+    - "a photo of a man"
+    - "a portrait of bruce willis"
+    - "a photo of dr dre"
+    - "a photo of emma roberts"
+    - "a photo of fred rogers"
+    - "a photo of jimmy carter"
+    - "a portrait of robert de niro"
+    - "A bicycle replica with a clock as the front wheel."
+    - "An old-fashioned green station wagon is parked on a shady driveway."
+    - "This is an open box containing four cucumbers."
