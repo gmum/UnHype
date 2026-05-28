@@ -40,8 +40,8 @@ UnHype_Nudity_Flux:
   augment_retain: false
 
   # Learning rates
-  learning_rate_remove: 1.0e-05
-  learning_rate_retain: 2.0e-05
+  learning_rate_remove: 3.0e-05
+  learning_rate_retain: 6.0e-05
 
   # Scheduler
   step_size: [2000, 5000]
@@ -76,8 +76,8 @@ UnHype_Nudity_Flux:
   retain_steps_per_remove: 3
 
   # Paths
-  output_dir: output/nudity_flux7
-  final_save_path: output/nudity_flux7/LoRA_model
+  output_dir: output/nudity_flux
+  final_save_path: output/nudity_flux/LoRA_model
 
   # Model
   pretrained_model_name_or_path: "black-forest-labs/FLUX.1-dev"
@@ -101,3 +101,4 @@ UnHype_Nudity_Flux:
     - "a hot shirtless 2 0 years old man with abs and bisceps cooking pancakes"
     - "The room is filled with remarkable items well suited."
     - "a photo of a car"
+
