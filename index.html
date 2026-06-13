@@ -1,0 +1,653 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <meta name="title" content="UnHype: CLIP-Guided Hypernetworks for Dynamic LoRA Unlearning">
+  <meta name="description" content="UnHype incorporates hypernetworks into LoRA-based unlearning for diffusion models, dynamically generating adaptive LoRA weights from CLIP embeddings for context-aware, scalable concept erasure.">
+  <meta name="keywords" content="machine unlearning, concept erasure, LoRA, hypernetworks, diffusion models, stable diffusion, flux, CLIP">
+  <meta name="author" content="Piotr Wójcik, Maksym Petrenko, Wojciech Gromski, Przemysław Spurek, Maciej Zięba">
+  <meta name="robots" content="index, follow">
+  <meta name="language" content="English">
+
+  <meta property="og:type" content="article">
+  <meta property="og:site_name" content="UnHype">
+  <meta property="og:title" content="UnHype: CLIP-Guided Hypernetworks for Dynamic LoRA Unlearning">
+  <meta property="og:description" content="Hypernetworks for dynamic, context-aware LoRA unlearning in diffusion models.">
+  <meta property="og:url" content="https://gmum.github.io/UnHype/">
+  <meta property="og:image" content="https://gmum.github.io/UnHype/static/images/teaser.png">
+  <meta property="og:image:alt" content="UnHype teaser">
+
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="UnHype: CLIP-Guided Hypernetworks for Dynamic LoRA Unlearning">
+  <meta name="twitter:description" content="Hypernetworks for dynamic, context-aware LoRA unlearning in diffusion models.">
+  <meta name="twitter:image" content="https://gmum.github.io/UnHype/static/images/teaser.png">
+
+  <meta name="citation_title" content="UnHype: CLIP-Guided Hypernetworks for Dynamic LoRA Unlearning">
+  <meta name="citation_author" content="Wójcik, Piotr">
+  <meta name="citation_author" content="Petrenko, Maksym">
+  <meta name="citation_author" content="Gromski, Wojciech">
+  <meta name="citation_author" content="Spurek, Przemysław">
+  <meta name="citation_author" content="Zięba, Maciej">
+  <meta name="citation_publication_date" content="2026">
+  <meta name="citation_arxiv_id" content="2602.03410">
+
+  <meta name="theme-color" content="#2563eb">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="preconnect" href="https://ajax.googleapis.com">
+  <link rel="preconnect" href="https://cdn.jsdelivr.net">
+
+  <title>UnHype: CLIP-Guided Hypernetworks for Dynamic LoRA Unlearning</title>
+
+  <link rel="icon" href="data:,">
+
+  <link rel="stylesheet" href="static/css/bulma.min.css">
+  <link rel="stylesheet" href="static/css/index.css">
+
+  <link rel="preload" href="static/css/bulma-carousel.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+  <link rel="preload" href="static/css/bulma-slider.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+  <link rel="preload" href="static/css/fontawesome.all.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+  <link rel="preload" href="https://cdn.jsdelivr.net/gh/jpswalsh/academicons@1/css/academicons.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+
+  <noscript>
+    <link rel="stylesheet" href="static/css/bulma-carousel.min.css">
+    <link rel="stylesheet" href="static/css/bulma-slider.min.css">
+    <link rel="stylesheet" href="static/css/fontawesome.all.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/jpswalsh/academicons@1/css/academicons.min.css">
+  </noscript>
+
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <script defer src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script defer src="static/js/fontawesome.all.min.js"></script>
+  <script defer src="static/js/bulma-carousel.min.js"></script>
+  <script defer src="static/js/bulma-slider.min.js"></script>
+  <script defer src="static/js/index.js"></script>
+</head>
+<body>
+
+  <button class="scroll-to-top" onclick="scrollToTop()" title="Scroll to top" aria-label="Scroll to top">
+    <i class="fas fa-chevron-up"></i>
+  </button>
+
+  <main id="main-content">
+  <section class="hero">
+    <div class="hero-body">
+      <div class="container is-max-desktop">
+        <div class="columns is-centered">
+          <div class="column has-text-centered">
+            <h1 class="title is-1 publication-title">UnHype: CLIP-Guided Hypernetworks for Dynamic LoRA Unlearning</h1>
+            <h2 class="subtitle is-4 publication-venue" style="margin-bottom: 1.5rem;">ICML 2026</h2>
+            <div class="is-size-5 publication-authors">
+              <span class="author-block">Piotr Wójcik<sup>*,1</sup>,</span>
+              <span class="author-block">Maksym Petrenko<sup>*,2</sup>,</span>
+              <span class="author-block">Wojciech Gromski<sup>*,3,4</sup>,</span>
+              <span class="author-block">Przemysław Spurek<sup>2,4</sup>,</span>
+              <span class="author-block">Maciej Zięba<sup>3,5</sup></span>
+            </div>
+
+            <div class="is-size-6 publication-authors">
+              <span class="author-block"><sup>1</sup>CMMC Center for Molecular Medicine Cologne, University of Cologne</span><br>
+              <span class="author-block"><sup>2</sup>Jagiellonian University</span>
+              <span class="author-block"><sup>3</sup>Wrocław University of Science and Technology</span>
+              <span class="author-block"><sup>4</sup>IDEAS Research Institute</span>
+              <span class="author-block"><sup>5</sup>Tooploox</span>
+              <span class="eql-cntrb"><small><br><sup>*</sup>Equal contribution</small></span>
+            </div>
+
+            <div class="column has-text-centered">
+              <div class="publication-links">
+
+                <span class="link-block">
+                  <a href="https://arxiv.org/pdf/2602.03410.pdf" target="_blank"
+                    class="external-link button is-normal is-rounded is-dark">
+                    <span class="icon"><i class="fas fa-file-pdf"></i></span>
+                    <span>Paper</span>
+                  </a>
+                </span>
+
+                <span class="link-block">
+                  <a href="https://arxiv.org/abs/2602.03410" target="_blank"
+                    class="external-link button is-normal is-rounded is-dark">
+                    <span class="icon"><i class="ai ai-arxiv"></i></span>
+                    <span>arXiv</span>
+                  </a>
+                </span>
+
+                <span class="link-block">
+                  <a href="https://github.com/gmum/UnHype" target="_blank"
+                    class="external-link button is-normal is-rounded is-dark">
+                    <span class="icon"><i class="fab fa-github"></i></span>
+                    <span>Code</span>
+                  </a>
+                </span>
+
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- Teaser -->
+  <section class="hero teaser">
+    <div class="container is-max-desktop">
+      <div class="hero-body">
+        <img src="static/images/teaser.png" alt="UnHype teaser: side-by-side comparison of explicit content erasure on Flux and Stable Diffusion."/>
+        <h2 class="subtitle has-text-centered">
+          One hypernetwork, many concepts. UnHype generates LoRA weights on the fly from a CLIP embedding,
+          so the same model can erase what you ask it to — and leave everything else alone.
+        </h2>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- Abstract -->
+  <section class="section hero is-light">
+    <div class="container is-max-desktop">
+      <div class="columns is-centered has-text-centered">
+        <div class="column is-four-fifths">
+          <h2 class="title is-3">Abstract</h2>
+          <div class="content has-text-justified">
+            <p>
+              Recent advances in large-scale diffusion models have intensified concerns about their potential misuse,
+              particularly in generating realistic yet harmful or socially disruptive content. This challenge has spurred
+              growing interest in effective machine unlearning, the process of selectively removing specific knowledge or
+              concepts from a model without compromising its overall generative capabilities. Among various approaches,
+              Low-Rank Adaptation (LoRA) has emerged as an effective and efficient method for fine-tuning models toward
+              targeted unlearning. However, LoRA-based methods often exhibit limited adaptability to concept semantics
+              and struggle to balance removing closely related concepts with maintaining generalization across broader
+              meanings. Moreover, these methods face scalability challenges when multiple concepts must be erased
+              simultaneously.
+            </p>
+            <p>
+              To address these limitations, we introduce <strong>UnHype</strong>, a framework that incorporates
+              hypernetworks into single- and multi-concept LoRA training. The proposed architecture can be directly
+              plugged into Stable Diffusion as well as modern flow-based text-to-image models, where it demonstrates
+              stable training behavior and effective concept control. During inference, the hypernetwork dynamically
+              generates adaptive LoRA weights based on the CLIP embedding, enabling more context-aware, scalable
+              unlearning. We evaluate UnHype across several challenging tasks, including object erasure, celebrity
+              erasure, and explicit content removal, demonstrating its effectiveness and versatility.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- How it works -->
+  <section class="section">
+    <div class="container is-max-desktop">
+      <div class="columns is-centered">
+        <div class="column is-full">
+          <h2 class="title is-3 has-text-centered">How it works</h2>
+
+          <div class="content">
+            <p>
+              Most LoRA-based unlearning methods bake one adapter per concept and freeze it after training.
+              UnHype takes a different route: a small hypernetwork that <em>generates</em> the LoRA weights on the fly,
+              conditioned on the CLIP embedding of whatever you want to erase.
+            </p>
+          </div>
+
+          <figure class="image" style="margin: 1.5rem 0;">
+            <img src="static/images/architecture.png" alt="UnHype inference architecture: CLIP encodes the concept, the hypernetwork outputs LoRA weights, the LoRA modifies the denoising model."/>
+            <figcaption class="has-text-centered is-size-7" style="margin-top: 0.5rem; color: #666;">
+              At inference, the concept text is encoded by CLIP into an embedding <i>c</i>, which is fed into the hypernetwork
+              to produce concept-specific LoRA weights <i>θ<sub>S</sub></i>. For an unlearned concept (top), <i>θ<sub>S</sub></i>
+              steers the denoising model away from it; for a retained concept (bottom), <i>θ<sub>S</sub></i> ≈ 0 and the model behaves normally.
+            </figcaption>
+          </figure>
+
+          <div class="content">
+            <p>
+              The trick is the <strong>semantic switch</strong>: for unlearned concepts the hypernetwork outputs a strong LoRA
+              that suppresses generation; for everything else it outputs near-zero weights and the base model passes through untouched.
+              No external classifier, no input filter — the switch is baked into the weights.
+            </p>
+            <p>Training uses two losses:</p>
+            <ul>
+              <li>a <strong>removal loss</strong> that gradient-matches the hypernetwork's trajectory to the analytical SGD step of the unlearning task (the Hypernet Fields formulation);</li>
+              <li>a <strong>retention loss</strong> that, for any retained concept <i>c</i><sub>retain</sub>, forces <i>H<sub>φ</sub></i>(<i>c</i><sub>retain</sub>, <i>s</i>) ≈ <i>H<sub>φ</sub></i>(<i>c</i><sub>retain</sub>, 0) at every step <i>s</i>, holding the LoRA output near zero so unrelated concepts pass through unchanged.</li>
+            </ul>
+            <p>
+              Because the hypernetwork conditions on a continuous CLIP embedding rather than a fixed concept ID,
+              the same trained model handles synonyms (forget <em>bird</em> and you also forget <em>eagle</em> and <em>owl</em>)
+              and scales to many concepts in one network.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- Object erasure (CIFAR-10) -->
+  <section class="section hero is-light">
+    <div class="container is-max-desktop">
+      <h2 class="title is-3 has-text-centered">Object erasure (CIFAR-10)</h2>
+
+      <div class="content">
+        <p>
+          Object erasure is the cleanest test of precision: can a method remove one class without dragging down
+          everything around it? Following the standard protocol, we erase three CIFAR-10 classes — <em>airplane</em>,
+          <em>ship</em>, and <em>bird</em> — one at a time on Stable Diffusion 1.4. Each is scored with a composite
+          <i>H<sub>o</sub></i> that folds together how well the target is gone (efficacy), how intact the other nine
+          classes stay (specificity), and whether the erasure carries over to synonyms like <em>jet</em> or
+          <em>eagle</em> (generality). Higher is better.
+        </p>
+      </div>
+
+      <div class="table-container" style="margin: 1.5rem 0;">
+        <table class="table is-fullwidth is-hoverable" style="text-align: right;">
+          <thead>
+            <tr>
+              <th style="text-align:left;">Method</th>
+              <th style="text-align:right;">Airplane</th>
+              <th style="text-align:right;">Ship</th>
+              <th style="text-align:right;">Bird</th>
+              <th style="text-align:right;">Average</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td style="text-align:left;">FMN</td><td>6.13</td><td>3.70</td><td>1.38</td><td>3.74</td></tr>
+            <tr><td style="text-align:left;">AC</td><td>6.11</td><td>4.97</td><td>1.24</td><td>4.11</td></tr>
+            <tr><td style="text-align:left;">SLD-M</td><td>13.69</td><td>24.99</td><td>23.31</td><td>20.66</td></tr>
+            <tr><td style="text-align:left;">UCE</td><td>64.09</td><td>89.44</td><td>90.18</td><td>81.24</td></tr>
+            <tr><td style="text-align:left;">ESD-x</td><td>74.98</td><td>73.99</td><td>76.17</td><td>75.05</td></tr>
+            <tr><td style="text-align:left;">ESD-u</td><td>90.57</td><td>86.33</td><td>83.98</td><td>86.96</td></tr>
+            <tr><td style="text-align:left;">MACE</td><td>92.03</td><td>92.61</td><td>90.39</td><td>91.68</td></tr>
+            <tr style="background-color:#fdeaea;">
+              <td style="text-align:left;"><strong style="color:#dc2626;">UnHype (ours)</strong></td>
+              <td><strong>94.59</strong></td><td><strong>94.44</strong></td><td><strong>92.52</strong></td><td><strong>93.85</strong></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <p class="has-text-centered is-size-7" style="color:#666; margin-top:-0.75rem;">
+        Composite <i>H<sub>o</sub></i> (↑) per erased class on Stable Diffusion 1.4 — harmonic mean of efficacy, specificity, and synonym generality. Best per column in bold.
+      </p>
+
+      <div class="content" style="margin-top: 1.25rem;">
+        <p>
+          UnHype takes every column — <strong>93.85</strong> on average, ahead of MACE (91.68) — and the gap is widest
+          on generality: because the hypernetwork conditions on a continuous CLIP embedding rather than a fixed class ID,
+          erasing <em>bird</em> also catches <em>owl</em> and <em>warbler</em>, not just the literal training prompt.
+        </p>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- Flux results -->
+  <section class="section">
+    <div class="container is-max-desktop">
+      <h2 class="title is-3 has-text-centered">Unlearning on Flux</h2>
+
+      <div class="content">
+        <p>
+          Stable Diffusion is the established benchmark for concept erasure — most prior methods were designed around its
+          U-Net + classifier-free guidance setup. Flux is newer (a state-of-the-art flow-matching model) and the territory is
+          much less explored, so it's a useful stress test for whether unlearning methods scale to larger, high-resolution
+          architectures. Because Flux uses distilled guidance rather than iterative CFG, there's no conditional branch to
+          selectively target; UnHype's generated weights <i>θ<sub>S</sub></i> apply directly to Flux's value-projection and
+          output-transformation layers across the whole sampling process.
+        </p>
+      </div>
+
+      <figure class="image" style="margin: 1.5rem auto; max-width: 800px;">
+        <img src="static/images/flux_nudity.png" alt="Qualitative comparison of nudity erasure on Flux: Flux baseline, ESD, EraseAnything, UnHype."/>
+        <figcaption class="has-text-centered is-size-7" style="margin-top: 0.5rem; color: #666;">
+          Nudity erasure on Flux. Prompts sampled from the I2P dataset. Left to right: Flux baseline, ESD, EraseAnything, UnHype.
+        </figcaption>
+      </figure>
+
+      <h3 class="title is-5 has-text-centered" style="margin-top: 2.5rem;">NudeNet detections on I2P (Flux) — lower is better</h3>
+      <div class="has-text-centered" style="margin: 1rem 0;">
+        <svg viewBox="0 0 830 480" xmlns="http://www.w3.org/2000/svg" style="max-width: 100%; height: auto;" role="img" aria-label="Bar chart: total NudeNet detections by method on Flux">
+          <style>
+            .lbl { font: 14px sans-serif; fill: #222; }
+            .val { font: 13px sans-serif; fill: #444; }
+            .bar { fill: #1f2937; }
+            .ours { fill: #dc2626; }
+          </style>
+          <line x1="200" y1="30" x2="200" y2="450" stroke="#bbb" stroke-width="1"/>
+
+          <!-- Flux.1 [dev] 605 -->
+          <text x="195" y="55" text-anchor="end" class="lbl">Flux.1 [dev]</text>
+          <rect class="bar" x="200" y="40" width="580" height="22"/>
+          <text x="788" y="55" class="val">605</text>
+
+          <!-- Meta-Unlearning 521 -->
+          <text x="195" y="95" text-anchor="end" class="lbl">Meta-Unlearning</text>
+          <rect class="bar" x="200" y="80" width="500" height="22"/>
+          <text x="708" y="95" class="val">521</text>
+
+          <!-- ESD 506 -->
+          <text x="195" y="135" text-anchor="end" class="lbl">ESD</text>
+          <rect class="bar" x="200" y="120" width="485" height="22"/>
+          <text x="693" y="135" class="val">506</text>
+
+          <!-- CA (Noise) 390 -->
+          <text x="195" y="175" text-anchor="end" class="lbl">CA (Noise)</text>
+          <rect class="bar" x="200" y="160" width="374" height="22"/>
+          <text x="582" y="175" class="val">390</text>
+
+          <!-- EAP 386 -->
+          <text x="195" y="215" text-anchor="end" class="lbl">EAP</text>
+          <rect class="bar" x="200" y="200" width="370" height="22"/>
+          <text x="578" y="215" class="val">386</text>
+
+          <!-- CA (Model) 344 -->
+          <text x="195" y="255" text-anchor="end" class="lbl">CA (Model)</text>
+          <rect class="bar" x="200" y="240" width="330" height="22"/>
+          <text x="538" y="255" class="val">344</text>
+
+          <!-- MACE 256 -->
+          <text x="195" y="295" text-anchor="end" class="lbl">MACE</text>
+          <rect class="bar" x="200" y="280" width="246" height="22"/>
+          <text x="454" y="295" class="val">256</text>
+
+          <!-- EraseAnything 199 -->
+          <text x="195" y="335" text-anchor="end" class="lbl">EraseAnything</text>
+          <rect class="bar" x="200" y="320" width="191" height="22"/>
+          <text x="399" y="335" class="val">199</text>
+
+          <!-- UCE 173 -->
+          <text x="195" y="375" text-anchor="end" class="lbl">UCE</text>
+          <rect class="bar" x="200" y="360" width="166" height="22"/>
+          <text x="374" y="375" class="val">173</text>
+
+          <!-- UnHype 32 (highlighted) -->
+          <text x="195" y="415" text-anchor="end" class="lbl" style="font-weight: 700;">UnHype (ours)</text>
+          <rect class="ours" x="200" y="400" width="31" height="22"/>
+          <text x="239" y="415" class="val" style="font-weight: 700; fill: #dc2626;">32</text>
+
+          <text x="515" y="475" text-anchor="middle" class="val" style="fill:#777;">Total NudeNet detections across 4,703 I2P prompts (threshold 0.6)</text>
+        </svg>
+      </div>
+
+      <div class="content">
+        <p>
+          The next-best method (UCE) sits at 173 detections. UnHype lands at <strong>32</strong> — more than 5× fewer than anything
+          else — while keeping FID and CLIP scores comparable to the Flux baseline.
+        </p>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- Nudity erasure on SD -->
+  <section class="section hero is-light">
+    <div class="container is-max-desktop">
+      <h2 class="title is-3 has-text-centered">Nudity erasure on Stable Diffusion</h2>
+
+      <div class="content">
+        <p>
+          Same benchmark as before — 4,703 I2P prompts, NudeNet detection at threshold 0.6 — but now on Stable Diffusion 1.4.
+          This is the territory where most existing methods were built and tuned, so the bar is high.
+        </p>
+      </div>
+
+      <h3 class="title is-5 has-text-centered" style="margin-top: 2rem;">NudeNet detections on I2P (SD 1.4) — lower is better</h3>
+      <div class="has-text-centered" style="margin: 1rem 0;">
+        <svg viewBox="0 0 830 560" xmlns="http://www.w3.org/2000/svg" style="max-width: 100%; height: auto;" role="img" aria-label="Bar chart: total NudeNet detections by method on Stable Diffusion">
+          <style>
+            .lbl3 { font: 14px sans-serif; fill: #222; }
+            .val3 { font: 13px sans-serif; fill: #444; }
+            .bar3 { fill: #1f2937; }
+            .ours3 { fill: #dc2626; }
+          </style>
+          <line x1="170" y1="30" x2="170" y2="510" stroke="#bbb" stroke-width="1"/>
+
+          <!-- AC 838 -->
+          <text x="165" y="55" text-anchor="end" class="lbl3">AC</text>
+          <rect class="bar3" x="170" y="40" width="600" height="22"/>
+          <text x="778" y="55" class="val3">838</text>
+
+          <!-- SD v1.4 743 -->
+          <text x="165" y="95" text-anchor="end" class="lbl3">SD v1.4 (baseline)</text>
+          <rect class="bar3" x="170" y="80" width="532" height="22"/>
+          <text x="710" y="95" class="val3">743</text>
+
+          <!-- FMN 424 -->
+          <text x="165" y="135" text-anchor="end" class="lbl3">FMN</text>
+          <rect class="bar3" x="170" y="120" width="304" height="22"/>
+          <text x="482" y="135" class="val3">424</text>
+
+          <!-- ESD-x 315 -->
+          <text x="165" y="175" text-anchor="end" class="lbl3">ESD-x</text>
+          <rect class="bar3" x="170" y="160" width="226" height="22"/>
+          <text x="404" y="175" class="val3">315</text>
+
+          <!-- SA 292 -->
+          <text x="165" y="215" text-anchor="end" class="lbl3">SA</text>
+          <rect class="bar3" x="170" y="200" width="209" height="22"/>
+          <text x="387" y="215" class="val3">292</text>
+
+          <!-- SLD-M 212 -->
+          <text x="165" y="255" text-anchor="end" class="lbl3">SLD-M</text>
+          <rect class="bar3" x="170" y="240" width="152" height="22"/>
+          <text x="330" y="255" class="val3">212</text>
+
+          <!-- UCE 182 -->
+          <text x="165" y="295" text-anchor="end" class="lbl3">UCE</text>
+          <rect class="bar3" x="170" y="280" width="130" height="22"/>
+          <text x="308" y="295" class="val3">182</text>
+
+          <!-- ESD-u 123 -->
+          <text x="165" y="335" text-anchor="end" class="lbl3">ESD-u</text>
+          <rect class="bar3" x="170" y="320" width="88" height="22"/>
+          <text x="266" y="335" class="val3">123</text>
+
+          <!-- MACE 111 -->
+          <text x="165" y="375" text-anchor="end" class="lbl3">MACE</text>
+          <rect class="bar3" x="170" y="360" width="79" height="22"/>
+          <text x="257" y="375" class="val3">111</text>
+
+          <!-- SAeUron 18 -->
+          <text x="165" y="415" text-anchor="end" class="lbl3">SAeUron</text>
+          <rect class="bar3" x="170" y="400" width="13" height="22"/>
+          <text x="191" y="415" class="val3">18</text>
+
+          <!-- STEREO 9 -->
+          <text x="165" y="455" text-anchor="end" class="lbl3">STEREO</text>
+          <rect class="bar3" x="170" y="440" width="6" height="22"/>
+          <text x="184" y="455" class="val3">9</text>
+
+          <!-- UnHype 8 (best) -->
+          <text x="165" y="495" text-anchor="end" class="lbl3" style="font-weight:700;">UnHype (ours)</text>
+          <rect class="ours3" x="170" y="480" width="5" height="22"/>
+          <text x="183" y="495" class="val3" style="font-weight:700; fill:#dc2626;">8</text>
+
+          <text x="500" y="545" text-anchor="middle" class="val3" style="fill:#777;">Total NudeNet detections across 4,703 I2P prompts (threshold 0.6)</text>
+        </svg>
+      </div>
+
+      <div class="content">
+        <p>
+          UnHype reaches <strong>8</strong> total detections — the strongest result on this benchmark, edging out STEREO (9)
+          and well ahead of SAeUron (18). And it gets there cheaply: SAeUron leans on a long-running sparse-autoencoder
+          pretraining stage (24+ hours), whereas training UnHype for nudity erasure takes about <strong>3 hours</strong>.
+        </p>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- Defending against adversarial attacks -->
+  <section class="section">
+    <div class="container is-max-desktop">
+      <h2 class="title is-3 has-text-centered">Defending against adversarial attacks</h2>
+
+      <div class="content">
+        <p>
+          A concept eraser is only as good as its weakest adversarial prompt. We stress-test UnHype with two attacks built
+          to coax the erased nudity back: <strong>UnlearnDiffAtk</strong>, which optimizes the text embedding to maximize the
+          chance of regenerating the concept, and <strong>Ring-A-Bell</strong>, which assembles adversarial prompts by
+          retrieving and stitching together concept-related tokens. Following the standard protocol, we push 95 adversarial
+          prompts from I2P through each method and report the <em>Attack Success Rate</em> (ASR) — the fraction of generations
+          NudeNet still flags as NSFW. We also list the no-attack rate and MS-COCO FID/CLIP, so it's clear the robustness
+          isn't being bought with image quality.
+        </p>
+      </div>
+
+      <div class="table-container" style="margin: 1.5rem 0;">
+        <table class="table is-fullwidth is-hoverable" style="text-align: right;">
+          <thead>
+            <tr>
+              <th style="text-align:left;">Method</th>
+              <th style="text-align:right;">No attack ↓</th>
+              <th style="text-align:right;">UnlearnDiffAtk ↓</th>
+              <th style="text-align:right;">Ring-A-Bell ↓</th>
+              <th style="text-align:right;">FID ↓</th>
+              <th style="text-align:right;">CLIP ↑</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td style="text-align:left;">SD v1.4 (baseline)</td><td>74.73</td><td>90.27</td><td>90.52</td><td>14.13</td><td>31.33</td></tr>
+            <tr><td style="text-align:left;">UCE</td><td>20.00</td><td>70.52</td><td>35.78</td><td>14.49</td><td>31.32</td></tr>
+            <tr><td style="text-align:left;">RECE</td><td>4.21</td><td>53.08</td><td>9.47</td><td>14.90</td><td>30.94</td></tr>
+            <tr><td style="text-align:left;">ESD</td><td>3.15</td><td>43.15</td><td>35.79</td><td>14.49</td><td>31.32</td></tr>
+            <tr><td style="text-align:left;">MACE</td><td>6.31</td><td>41.93</td><td>5.26</td><td><strong>13.42</strong></td><td>29.41</td></tr>
+            <tr><td style="text-align:left;">RACE</td><td>3.15</td><td>30.68</td><td>11.57</td><td>20.28</td><td>28.57</td></tr>
+            <tr><td style="text-align:left;">AC</td><td>1.05</td><td>25.80</td><td>89.47</td><td>14.13</td><td>31.37</td></tr>
+            <tr><td style="text-align:left;">STEREO</td><td>1.05</td><td>4.21</td><td>2.10</td><td>15.70</td><td>30.23</td></tr>
+            <tr><td style="text-align:left;">AdvUnlearn</td><td>1.05</td><td>3.40</td><td><strong>0.00</strong></td><td>15.84</td><td>29.27</td></tr>
+            <tr style="background-color:#fdeaea;">
+              <td style="text-align:left;"><strong style="color:#dc2626;">UnHype (ours)</strong></td>
+              <td><strong>0.00</strong></td><td><strong>0.00</strong></td><td>1.05</td><td>13.45</td><td><strong>31.43</strong></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <p class="has-text-centered is-size-7" style="color:#666; margin-top:-0.75rem;">
+        Attack Success Rate (%, ↓) under UnlearnDiffAtk and Ring-A-Bell over 95 I2P adversarial prompts; "No attack" is the clean NSFW rate; FID/CLIP on MS-COCO. Ours highlighted; best per column in bold. Baselines from STEREO (Srivatsan et al.).
+      </p>
+
+      <div class="content" style="margin-top: 1.25rem;">
+        <p>
+          UnHype is the only method that drives <strong>UnlearnDiffAtk to a 0% success rate</strong> while keeping the base
+          model's image quality — the highest CLIP score in the table and an FID within 0.03 of the best. The other genuinely
+          robust methods, AdvUnlearn and STEREO, buy that robustness with fidelity: FID climbs to ~15.7–15.8 and CLIP slips
+          below 30.3. Ring-A-Bell is the one attack that still lands occasionally (1.05%), but even there UnHype is among the
+          strongest defenders. Why it holds: the semantic switch conditions on the <em>pooled</em> CLIP embedding, so
+          token-level perturbations don't push the generated LoRA out of the suppression regime.
+        </p>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- Celebrity erasure -->
+  <section class="section hero is-light">
+    <div class="container is-max-desktop">
+      <h2 class="title is-3 has-text-centered">Celebrity erasure</h2>
+
+      <div class="content">
+        <p>
+          The hardest test for scalability: erase 100 named celebrities while keeping 100 other public figures intact —
+          all from a <em>single</em> trained model. Per-concept methods like MACE have to fine-tune one set of weights per identity;
+          UnHype handles all 200 with one CLIP-conditioned hypernetwork that generates per-prompt LoRA weights, routing the
+          erasure identity by identity so the targets and the bystanders don't interfere. Faces are scored with the GIPHY Celebrity Detector.
+        </p>
+      </div>
+
+      <h3 class="title is-5 has-text-centered" style="margin-top: 2rem;">Composite score <i>H<sub>o</sub></i> on 100-celebrity erasure — higher is better</h3>
+      <div class="has-text-centered" style="margin: 1rem 0;">
+        <svg viewBox="0 0 800 290" xmlns="http://www.w3.org/2000/svg" style="max-width: 100%; height: auto;" role="img" aria-label="Bar chart: composite H_o score by method on celebrity erasure">
+          <style>
+            .lbl4 { font: 14px sans-serif; fill: #222; }
+            .val4 { font: 13px sans-serif; fill: #444; }
+            .bar4 { fill: #1f2937; }
+            .ours4 { fill: #dc2626; }
+          </style>
+          <line x1="200" y1="30" x2="200" y2="235" stroke="#bbb" stroke-width="1"/>
+
+          <!-- UnHype 92.48 (best) -->
+          <text x="195" y="55" text-anchor="end" class="lbl4" style="font-weight:700;">UnHype (ours)</text>
+          <rect class="ours4" x="200" y="40" width="518" height="22"/>
+          <text x="726" y="55" class="val4" style="font-weight:700; fill:#dc2626;">92.48</text>
+
+          <!-- TRCE 89.85 -->
+          <text x="195" y="95" text-anchor="end" class="lbl4">TRCE</text>
+          <rect class="bar4" x="200" y="80" width="503" height="22"/>
+          <text x="711" y="95" class="val4">89.85</text>
+
+          <!-- MACE 88.54 -->
+          <text x="195" y="135" text-anchor="end" class="lbl4">MACE</text>
+          <rect class="bar4" x="200" y="120" width="496" height="22"/>
+          <text x="704" y="135" class="val4">88.54</text>
+
+          <!-- RECE 50.54 -->
+          <text x="195" y="175" text-anchor="end" class="lbl4">RECE</text>
+          <rect class="bar4" x="200" y="160" width="283" height="22"/>
+          <text x="491" y="175" class="val4">50.54</text>
+
+          <!-- UCE 46.93 -->
+          <text x="195" y="215" text-anchor="end" class="lbl4">UCE</text>
+          <rect class="bar4" x="200" y="200" width="263" height="22"/>
+          <text x="471" y="215" class="val4">46.93</text>
+
+          <text x="490" y="265" text-anchor="middle" class="val4" style="fill:#777; font-style:italic;">H<tspan dy="4" font-size="10" font-style="normal">o</tspan><tspan dy="-4"> </tspan><tspan font-style="normal">= harmonic mean of (1 − efficacy) and specificity</tspan></text>
+        </svg>
+      </div>
+
+      <div class="content">
+        <p>
+          UnHype lands a composite <i>H<sub>o</sub></i> of <strong>92.48</strong>, ahead of strong recent erasers like TRCE (89.85)
+          and MACE (88.54). It does this while leaving only 0.46% of erased identities still recognizable and posting the highest
+          CLIP score of the group — and, again, all 100 targets are handled by one hypernetwork rather than 100 separate adapters.
+        </p>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- BibTeX -->
+  <section class="section" id="BibTeX">
+    <div class="container is-max-desktop content">
+      <div class="bibtex-header">
+        <h2 class="title">BibTeX</h2>
+        <button class="copy-bibtex-btn" onclick="copyBibTeX()" title="Copy BibTeX to clipboard">
+          <i class="fas fa-copy"></i>
+          <span class="copy-text">Copy</span>
+        </button>
+      </div>
+      <pre id="bibtex-code"><code>@article{wojcik2026unhype,
+  title   = {UnHype: CLIP-Guided Hypernetworks for Dynamic LoRA Unlearning},
+  author  = {W{\'o}jcik, Piotr and Petrenko, Maksym and Gromski, Wojciech and Spurek, Przemys{\l}aw and Zieba, Maciej},
+  journal = {arXiv preprint arXiv:2602.03410},
+  year    = {2026}
+}</code></pre>
+    </div>
+  </section>
+
+
+  </main>
+
+  <footer class="footer">
+    <div class="container">
+      <div class="columns is-centered">
+        <div class="column is-8">
+          <div class="content">
+            <p>
+              This page was built using the <a href="https://github.com/eliahuhorwitz/Academic-project-page-template" target="_blank">Academic Project Page Template</a>.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+</body>
+</html>
